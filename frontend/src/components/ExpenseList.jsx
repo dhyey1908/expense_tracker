@@ -41,7 +41,7 @@ const ExpenseList = () => {
             await updateExpense.mutateAsync({
                 id,
                 data: {
-                    amount: parseFloat(editData.amount),
+                    amount: parseInt(editData.amount, 10),
                     date: editData.date,
                     description: editData.description,
                 }
@@ -140,12 +140,12 @@ const ExpenseList = () => {
                                                 onChange={handleEditChange}
                                                 className="form-input"
                                                 style={{ width: '120px', padding: '6px 10px' }}
-                                                step="0.01"
+                                                step="1"
                                                 min="0"
                                             />
                                         ) : (
                                             <span className="badge badge-amount">
-                                                ${parseFloat(expense.amount).toFixed(2)}
+                                                ₹{parseFloat(expense.amount).toFixed(0)}
                                             </span>
                                         )}
                                     </td>

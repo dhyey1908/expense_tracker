@@ -1,6 +1,5 @@
 const db = require('../config/database');
 
-// Get all expenses with optional filters
 const getExpenses = async (req, res) => {
     try {
         const { user_id, category_id, start_date, end_date } = req.query;
@@ -25,7 +24,6 @@ const getExpenses = async (req, res) => {
 
         const params = [];
 
-        // Apply filters if provided
         if (user_id) {
             query += ' AND e.user_id = ?';
             params.push(user_id);
@@ -65,7 +63,6 @@ const getExpenses = async (req, res) => {
     }
 };
 
-// Get single expense by ID
 const getExpenseById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -111,12 +108,10 @@ const getExpenseById = async (req, res) => {
     }
 };
 
-// Add new expense
 const addExpense = async (req, res) => {
     try {
         const { user_id, category_id, amount, date, description } = req.body;
 
-        // Verify user exists
         const [users] = await db.query('SELECT id FROM users WHERE id = ?', [user_id]);
         if (users.length === 0) {
             return res.status(404).json({
@@ -125,7 +120,6 @@ const addExpense = async (req, res) => {
             });
         }
 
-        // Verify category exists
         const [categories] = await db.query('SELECT id FROM categories WHERE id = ?', [category_id]);
         if (categories.length === 0) {
             return res.status(404).json({
@@ -147,7 +141,6 @@ const addExpense = async (req, res) => {
             description || null
         ]);
 
-        // Fetch the created expense
         const [newExpense] = await db.query(`
       SELECT 
         e.id, 
@@ -181,13 +174,11 @@ const addExpense = async (req, res) => {
     }
 };
 
-// Update expense
 const updateExpense = async (req, res) => {
     try {
         const { id } = req.params;
         const { user_id, category_id, amount, date, description } = req.body;
 
-        // Check if expense exists
         const [existing] = await db.query('SELECT id FROM expenses WHERE id = ?', [id]);
         if (existing.length === 0) {
             return res.status(404).json({
@@ -196,7 +187,6 @@ const updateExpense = async (req, res) => {
             });
         }
 
-        // Verify user exists if provided
         if (user_id) {
             const [users] = await db.query('SELECT id FROM users WHERE id = ?', [user_id]);
             if (users.length === 0) {
@@ -207,7 +197,6 @@ const updateExpense = async (req, res) => {
             }
         }
 
-        // Verify category exists if provided
         if (category_id) {
             const [categories] = await db.query('SELECT id FROM categories WHERE id = ?', [category_id]);
             if (categories.length === 0) {
@@ -218,7 +207,6 @@ const updateExpense = async (req, res) => {
             }
         }
 
-        // Build dynamic update query
         const updates = [];
         const params = [];
 
@@ -259,7 +247,6 @@ const updateExpense = async (req, res) => {
 
         await db.query(query, params);
 
-        // Fetch updated expense
         const [updatedExpense] = await db.query(`
       SELECT 
         e.id, 
@@ -293,12 +280,10 @@ const updateExpense = async (req, res) => {
     }
 };
 
-// Delete expense
 const deleteExpense = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Check if expense exists
         const [existing] = await db.query('SELECT id FROM expenses WHERE id = ?', [id]);
         if (existing.length === 0) {
             return res.status(404).json({

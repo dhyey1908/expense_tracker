@@ -1,6 +1,5 @@
 const { body } = require('express-validator');
 
-// Expense validation rules
 const expenseValidationRules = () => {
     return [
         body('user_id')
@@ -18,14 +17,22 @@ const expenseValidationRules = () => {
         body('amount')
             .notEmpty()
             .withMessage('Amount is required')
-            .isFloat({ min: 0.01 })
+            .isInt({ min: 1 })
             .withMessage('Amount must be a positive number greater than 0'),
 
         body('date')
             .notEmpty()
             .withMessage('Date is required')
             .isDate()
-            .withMessage('Invalid date format'),
+            .withMessage('Invalid date format')
+            .custom((value) => {
+                const inputDate = new Date(value);
+                const today = new Date();
+                if (inputDate.toISOString().split('T')[0] > today.toISOString().split('T')[0]) {
+                    throw new Error('Date cannot be in the future');
+                }
+                return true;
+            }),
 
         body('description')
             .optional()
@@ -34,7 +41,6 @@ const expenseValidationRules = () => {
     ];
 };
 
-// Update expense validation rules
 const updateExpenseValidationRules = () => {
     return [
         body('user_id')
@@ -49,13 +55,21 @@ const updateExpenseValidationRules = () => {
 
         body('amount')
             .optional()
-            .isFloat({ min: 0.01 })
+            .isInt({ min: 1 })
             .withMessage('Amount must be a positive number greater than 0'),
 
         body('date')
             .optional()
             .isDate()
-            .withMessage('Invalid date format'),
+            .withMessage('Invalid date format')
+            .custom((value) => {
+                const inputDate = new Date(value);
+                const today = new Date();
+                if (inputDate.toISOString().split('T')[0] > today.toISOString().split('T')[0]) {
+                    throw new Error('Date cannot be in the future');
+                }
+                return true;
+            }),
 
         body('description')
             .optional()

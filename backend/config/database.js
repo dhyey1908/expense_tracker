@@ -1,10 +1,10 @@
 const mysql = require('mysql2');
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',           // Change this to your MySQL username
-  password: 'yourpassword',           // Change this to your MySQL password
-  database: 'expense_tracker',
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'expense_tracker',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0

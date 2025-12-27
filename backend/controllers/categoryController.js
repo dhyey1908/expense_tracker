@@ -1,16 +1,8 @@
 const db = require('../config/database');
 
-// Get all categories
 const getCategories = async (req, res) => {
     try {
-        const query = `
-      SELECT 
-        id, 
-        name, 
-        created_at
-      FROM categories 
-      ORDER BY name ASC
-    `;
+        const query = `SELECT id, name, created_at FROM categories ORDER BY name ASC`;
 
         const [categories] = await db.query(query);
 
@@ -29,19 +21,11 @@ const getCategories = async (req, res) => {
     }
 };
 
-// Get category by ID
 const getCategoryById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const query = `
-      SELECT 
-        id, 
-        name, 
-        created_at
-      FROM categories 
-      WHERE id = ?
-    `;
+        const query = `SELECT id, name, created_at FROM categories WHERE id = ?`;
 
         const [categories] = await db.query(query, [id]);
 

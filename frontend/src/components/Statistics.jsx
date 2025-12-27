@@ -70,7 +70,7 @@ const Statistics = () => {
                                                         })}
                                                     </span>
                                                     <span className="badge badge-amount" style={{ fontSize: '0.85rem' }}>
-                                                        ${parseFloat(day.amount).toFixed(2)}
+                                                        ₹{parseFloat(day.amount).toFixed(0)}
                                                     </span>
                                                 </div>
                                             </div>
@@ -102,7 +102,6 @@ const Statistics = () => {
                                     <div className="empty-text" style={{ fontSize: '0.9rem' }}>No data available</div>
                                 </div>
                             ) : (
-                                // Group by user
                                 (() => {
                                     const groupedByUser = {};
                                     monthlyChange.data?.data?.forEach(item => {
@@ -128,13 +127,13 @@ const Statistics = () => {
                                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '2px' }}>
                                                         <span style={{ color: 'var(--text-muted)' }}>Previous:</span>
                                                         <span style={{ color: 'var(--text-secondary)' }}>
-                                                            ${parseFloat(month.previous_amount).toFixed(2)}
+                                                            ₹{parseFloat(month.previous_amount).toFixed(0)}
                                                         </span>
                                                     </div>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
                                                         <span style={{ color: 'var(--text-muted)' }}>Current:</span>
                                                         <span style={{ color: 'var(--text-secondary)' }}>
-                                                            ${parseFloat(month.current_amount).toFixed(2)}
+                                                            ₹{parseFloat(month.current_amount).toFixed(0)}
                                                         </span>
                                                     </div>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -192,7 +191,7 @@ const Statistics = () => {
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <span style={{ color: 'var(--text-secondary)' }}>Predicted Amount:</span>
                                             <span className="badge badge-amount" style={{ fontSize: '1.1rem', fontWeight: '800' }}>
-                                                ${parseFloat(userData.predicted_amount).toFixed(2)}
+                                                ₹{parseFloat(userData.predicted_amount).toFixed(0)}
                                             </span>
                                         </div>
                                         <div style={{

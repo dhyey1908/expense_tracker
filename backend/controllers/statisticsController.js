@@ -2,8 +2,8 @@ const db = require('../config/database');
 
 // Statistic 1: Find each user's top 3 days by total expenditure
 const getTopDaysByUser = async (req, res) => {
-    try {
-        const query = `
+  try {
+    const query = `
       WITH daily_totals AS (
         SELECT 
           u.id as user_id,
@@ -34,43 +34,42 @@ const getTopDaysByUser = async (req, res) => {
       ORDER BY user_id, rank_num;
     `;
 
-        const [results] = await db.query(query);
+    const [results] = await db.query(query);
 
-        // Group by user
-        const groupedResults = {};
-        results.forEach(row => {
-            if (!groupedResults[row.user_id]) {
-                groupedResults[row.user_id] = {
-                    user_id: row.user_id,
-                    user_name: row.user_name,
-                    top_days: []
-                };
-            }
-            groupedResults[row.user_id].top_days.push({
-                date: row.date,
-                amount: parseFloat(row.amount)
-            });
-        });
+    const groupedResults = {};
+    results.forEach(row => {
+      if (!groupedResults[row.user_id]) {
+        groupedResults[row.user_id] = {
+          user_id: row.user_id,
+          user_name: row.user_name,
+          top_days: []
+        };
+      }
+      groupedResults[row.user_id].top_days.push({
+        date: row.date,
+        amount: parseFloat(row.amount)
+      });
+    });
 
-        res.status(200).json({
-            success: true,
-            message: 'Top 3 days by expenditure for each user',
-            data: Object.values(groupedResults)
-        });
-    } catch (error) {
-        console.error('Error fetching top days statistics:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching top days statistics',
-            error: error.message
-        });
-    }
+    res.status(200).json({
+      success: true,
+      message: 'Top 3 days by expenditure for each user',
+      data: Object.values(groupedResults)
+    });
+  } catch (error) {
+    console.error('Error fetching top days statistics:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching top days statistics',
+      error: error.message
+    });
+  }
 };
 
 // Statistic 2: Calculate percentage change in total expenditure from previous month
 const getMonthlyChange = async (req, res) => {
-    try {
-        const query = `
+  try {
+    const query = `
       WITH monthly_totals AS (
         SELECT 
           u.id as user_id,
@@ -108,35 +107,35 @@ const getMonthlyChange = async (req, res) => {
       ORDER BY user_id, month DESC;
     `;
 
-        const [results] = await db.query(query);
+    const [results] = await db.query(query);
 
-        res.status(200).json({
-            success: true,
-            message: 'Percentage change in expenditure from previous month',
-            data: results.map(row => ({
-                user_id: row.user_id,
-                user_name: row.user_name,
-                current_month: row.current_month,
-                previous_month: row.previous_month,
-                previous_amount: parseFloat(row.previous_amount || 0),
-                current_amount: parseFloat(row.current_amount || 0),
-                percentage_change: row.percentage_change
-            }))
-        });
-    } catch (error) {
-        console.error('Error fetching monthly change statistics:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching monthly change statistics',
-            error: error.message
-        });
-    }
+    res.status(200).json({
+      success: true,
+      message: 'Percentage change in expenditure from previous month',
+      data: results.map(row => ({
+        user_id: row.user_id,
+        user_name: row.user_name,
+        current_month: row.current_month,
+        previous_month: row.previous_month,
+        previous_amount: parseFloat(row.previous_amount || 0),
+        current_amount: parseFloat(row.current_amount || 0),
+        percentage_change: row.percentage_change
+      }))
+    });
+  } catch (error) {
+    console.error('Error fetching monthly change statistics:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching monthly change statistics',
+      error: error.message
+    });
+  }
 };
 
 // Statistic 3: Predict next month's total expenditure based on average of last 3 months
 const predictNextMonth = async (req, res) => {
-    try {
-        const query = `
+  try {
+    const query = `
       WITH monthly_totals AS (
         SELECT 
           u.id as user_id,
@@ -171,7 +170,7 @@ const predictNextMonth = async (req, res) => {
         user_id,
         user_name,
         COUNT(DISTINCT month) as months_count,
-        GROUP_CONCAT(CONCAT(month, ': $', ROUND(monthly_total, 2)) ORDER BY month DESC SEPARATOR ', ') as last_months_data,
+        GROUP_CONCAT(CONCAT(month, ': ₹', ROUND(monthly_total, 2)) ORDER BY month DESC SEPARATOR ', ') as last_months_data,
         ROUND(AVG(monthly_total), 2) as predicted_amount
       FROM last_3_months
       GROUP BY user_id, user_name
@@ -179,37 +178,36 @@ const predictNextMonth = async (req, res) => {
       ORDER BY user_id;
     `;
 
-        const [results] = await db.query(query);
+    const [results] = await db.query(query);
 
-        // Get current month in YYYY-MM format
-        const currentDate = new Date();
-        const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-        const nextMonthStr = nextMonth.toISOString().substring(0, 7);
+    const currentDate = new Date();
+    const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+    const nextMonthStr = nextMonth.toISOString().substring(0, 7);
 
-        res.status(200).json({
-            success: true,
-            message: 'Next month expenditure prediction based on last 3 months average',
-            data: results.map(row => ({
-                user_id: row.user_id,
-                user_name: row.user_name,
-                next_month: nextMonthStr,
-                months_analyzed: row.months_count,
-                last_months_data: row.last_months_data,
-                predicted_amount: parseFloat(row.predicted_amount)
-            }))
-        });
-    } catch (error) {
-        console.error('Error fetching prediction statistics:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching prediction statistics',
-            error: error.message
-        });
-    }
+    res.status(200).json({
+      success: true,
+      message: 'Next month expenditure prediction based on last 3 months average',
+      data: results.map(row => ({
+        user_id: row.user_id,
+        user_name: row.user_name,
+        next_month: nextMonthStr,
+        months_analyzed: row.months_count,
+        last_months_data: row.last_months_data,
+        predicted_amount: parseFloat(row.predicted_amount)
+      }))
+    });
+  } catch (error) {
+    console.error('Error fetching prediction statistics:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching prediction statistics',
+      error: error.message
+    });
+  }
 };
 
 module.exports = {
-    getTopDaysByUser,
-    getMonthlyChange,
-    predictNextMonth
+  getTopDaysByUser,
+  getMonthlyChange,
+  predictNextMonth
 };

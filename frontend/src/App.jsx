@@ -1,5 +1,6 @@
 import React from 'react';
 import ExpenseForm from './components/ExpenseForm';
+import { Toaster } from 'react-hot-toast';
 import FilterSection from './components/FilterSection';
 import ExpenseList from './components/ExpenseList';
 import Statistics from './components/Statistics';
@@ -13,28 +14,12 @@ function App() {
             </header>
 
             <main className="main-container">
-                {/* Add Expense Form */}
                 <ExpenseForm />
-
-                {/* Filter Section */}
                 <FilterSection />
-
-                {/* Expense List */}
                 <ExpenseList />
-
-                {/* Statistics */}
                 <Statistics />
             </main>
-
-            <footer style={{
-                textAlign: 'center',
-                padding: 'var(--spacing-xl) 0',
-                color: 'var(--text-muted)',
-                fontSize: '0.9rem'
-            }}>
-                <p>Built with ❤️ using React, Redux, Node.js & MySQL</p>
-                <p style={{ marginTop: '8px' }}>MERN Stack Assignment - 2025</p>
-            </footer>
+            <Toaster position="top-right" />
         </div>
     );
 }

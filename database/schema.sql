@@ -1,16 +1,10 @@
--- ============================================
--- Expense Tracker Database Schema
--- ============================================
-
 -- Create database
 CREATE DATABASE IF NOT EXISTS expense_tracker;
 
 -- Use the database
 USE expense_tracker;
 
--- ============================================
--- Table: Users
--- ============================================
+-- users table
 CREATE TABLE users (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL,
@@ -21,9 +15,7 @@ CREATE TABLE users (
   INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Table: Categories
--- ============================================
+-- categories table
 CREATE TABLE categories (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(50) NOT NULL UNIQUE,
@@ -31,14 +23,12 @@ CREATE TABLE categories (
   INDEX idx_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Table: Expenses
--- ============================================
+-- expenses table
 CREATE TABLE expenses (
   id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT NOT NULL,
   category_id INT NOT NULL,
-  amount DECIMAL(10, 2) NOT NULL CHECK (amount >= 0),
+  amount INT NOT NULL CHECK (amount >= 0),
   date DATE NOT NULL,
   description TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -51,17 +41,13 @@ CREATE TABLE expenses (
   INDEX idx_user_date (user_id, date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Sample Data
--- ============================================
-
 -- Insert sample users
 INSERT INTO users (name, email, status) VALUES
-('John Doe', 'john.doe@example.com', 'active'),
-('Jane Smith', 'jane.smith@example.com', 'active'),
-('Mike Johnson', 'mike.johnson@example.com', 'active'),
-('Sarah Williams', 'sarah.williams@example.com', 'active'),
-('Tom Brown', 'tom.brown@example.com', 'active');
+('Amit Sharma', 'amit.sharma@example.com', 'active'),
+('Priya Patel', 'priya.patel@example.com', 'active'),
+('Rahul Verma', 'rahul.verma@example.com', 'active'),
+('Neha Singh', 'neha.singh@example.com', 'active'),
+('Rohit Mehta', 'rohit.mehta@example.com', 'active');
 
 -- Insert sample categories
 INSERT INTO categories (name) VALUES
@@ -76,123 +62,116 @@ INSERT INTO categories (name) VALUES
 ('Personal Care'),
 ('Others');
 
--- Insert comprehensive sample expenses for testing statistics
--- (Data spanning last 4 months for better statistics)
-
--- John Doe - User ID 1
+-- Insert sample expenses
 INSERT INTO expenses (user_id, category_id, amount, date, description) VALUES
 -- October 2025
-(1, 1, 150.00, '2025-10-01', 'Grocery shopping'),
-(1, 2, 50.00, '2025-10-01', 'Taxi fare'),
-(1, 1, 200.00, '2025-10-05', 'Restaurant dinner'),
-(1, 3, 500.00, '2025-10-10', 'New shoes'),
-(1, 1, 100.00, '2025-10-15', 'Lunch with friends'),
-(1, 2, 75.00, '2025-10-20', 'Uber rides'),
-(1, 4, 120.00, '2025-10-25', 'Movie tickets'),
+(1, 1, 150, '2025-10-01', 'Grocery shopping'),
+(1, 2, 50, '2025-10-01', 'Taxi fare'),
+(1, 1, 200, '2025-10-05', 'Restaurant dinner'),
+(1, 3, 500, '2025-10-10', 'New shoes'),
+(1, 1, 100, '2025-10-15', 'Lunch with friends'),
+(1, 2, 75, '2025-10-20', 'Uber rides'),
+(1, 4, 120, '2025-10-25', 'Movie tickets'),
 
 -- November 2025
-(1, 1, 180.00, '2025-11-01', 'Weekly groceries'),
-(1, 5, 350.00, '2025-11-05', 'Electricity bill'),
-(1, 1, 220.00, '2025-11-10', 'Family dinner'),
-(1, 2, 60.00, '2025-11-15', 'Gas refill'),
-(1, 3, 800.00, '2025-11-20', 'Black Friday shopping'),
+(1, 1, 180, '2025-11-01', 'Weekly groceries'),
+(1, 5, 350, '2025-11-05', 'Electricity bill'),
+(1, 1, 220, '2025-11-10', 'Family dinner'),
+(1, 2, 60, '2025-11-15', 'Gas refill'),
+(1, 3, 800, '2025-11-20', 'Black Friday shopping'),
 
 -- December 2025
-(1, 1, 160.00, '2025-12-01', 'Grocery shopping'),
-(1, 2, 45.00, '2025-12-01', 'Taxi'),
-(1, 1, 250.00, '2025-12-05', 'Christmas dinner prep'),
-(1, 4, 200.00, '2025-12-10', 'Concert tickets'),
-(1, 3, 600.00, '2025-12-15', 'Holiday gifts'),
-(1, 1, 190.00, '2025-12-20', 'Party supplies'),
-(1, 1, 300.00, '2025-12-20', 'More party supplies'),
+(1, 1, 160, '2025-12-01', 'Grocery shopping'),
+(1, 2, 45, '2025-12-01', 'Taxi'),
+(1, 1, 250, '2025-12-05', 'Christmas dinner prep'),
+(1, 4, 200, '2025-12-10', 'Concert tickets'),
+(1, 3, 600, '2025-12-15', 'Holiday gifts'),
+(1, 1, 190, '2025-12-20', 'Party supplies'),
+(1, 1, 300, '2025-12-20', 'More party supplies'),
 
--- Jane Smith - User ID 2
 INSERT INTO expenses (user_id, category_id, amount, date, description) VALUES
 -- October 2025
-(2, 1, 120.00, '2025-10-02', 'Breakfast meeting'),
-(2, 6, 300.00, '2025-10-08', 'Doctor visit'),
-(2, 1, 180.00, '2025-10-12', 'Lunch buffet'),
-(2, 7, 450.00, '2025-10-18', 'Online course'),
-(2, 1, 90.00, '2025-10-22', 'Coffee shop'),
+(2, 1, 120, '2025-10-02', 'Breakfast meeting'),
+(2, 6, 300, '2025-10-08', 'Doctor visit'),
+(2, 1, 180, '2025-10-12', 'Lunch buffet'),
+(2, 7, 450, '2025-10-18', 'Online course'),
+(2, 1, 90, '2025-10-22', 'Coffee shop'),
 
 -- November 2025
-(2, 2, 85.00, '2025-11-03', 'Metro card'),
-(2, 1, 210.00, '2025-11-08', 'Dinner party'),
-(2, 3, 550.00, '2025-11-12', 'New laptop accessories'),
-(2, 1, 140.00, '2025-11-18', 'Brunch'),
-(2, 5, 280.00, '2025-11-25', 'Internet bill'),
+(2, 2, 85, '2025-11-03', 'Metro card'),
+(2, 1, 210, '2025-11-08', 'Dinner party'),
+(2, 3, 550, '2025-11-12', 'New laptop accessories'),
+(2, 1, 140, '2025-11-18', 'Brunch'),
+(2, 5, 280, '2025-11-25', 'Internet bill'),
 
 -- December 2025
-(2, 1, 165.00, '2025-12-02', 'Takeout orders'),
-(2, 2, 95.00, '2025-12-07', 'Car maintenance'),
-(2, 1, 230.00, '2025-12-12', 'Restaurant'),
-(2, 4, 175.00, '2025-12-17', 'Theater show'),
-(2, 3, 720.00, '2025-12-22', 'New phone'),
-(2, 1, 200.00, '2025-12-22', 'Holiday dinner'),
+(2, 1, 165, '2025-12-02', 'Takeout orders'),
+(2, 2, 95, '2025-12-07', 'Car maintenance'),
+(2, 1, 230, '2025-12-12', 'Restaurant'),
+(2, 4, 175, '2025-12-17', 'Theater show'),
+(2, 3, 720, '2025-12-22', 'New phone'),
+(2, 1, 200, '2025-12-22', 'Holiday dinner'),
 
--- Mike Johnson - User ID 3
 INSERT INTO expenses (user_id, category_id, amount, date, description) VALUES
 -- October 2025
-(3, 8, 1500.00, '2025-10-05', 'Weekend trip'),
-(3, 1, 200.00, '2025-10-10', 'Hotel dining'),
-(3, 2, 100.00, '2025-10-15', 'Car rental'),
-(3, 1, 150.00, '2025-10-20', 'Fast food'),
-(3, 4, 90.00, '2025-10-25', 'Gaming'),
+(3, 8, 1500, '2025-10-05', 'Weekend trip'),
+(3, 1, 200, '2025-10-10', 'Hotel dining'),
+(3, 2, 100, '2025-10-15', 'Car rental'),
+(3, 1, 150, '2025-10-20', 'Fast food'),
+(3, 4, 90, '2025-10-25', 'Gaming'),
 
 -- November 2025
-(3, 1, 220.00, '2025-11-01', 'Groceries'),
-(3, 3, 900.00, '2025-11-06', 'Electronics'),
-(3, 1, 180.00, '2025-11-11', 'Dining out'),
-(3, 5, 420.00, '2025-11-16', 'Phone bill'),
-(3, 2, 110.00, '2025-11-21', 'Gas'),
+(3, 1, 220, '2025-11-01', 'Groceries'),
+(3, 3, 900, '2025-11-06', 'Electronics'),
+(3, 1, 180, '2025-11-11', 'Dining out'),
+(3, 5, 420, '2025-11-16', 'Phone bill'),
+(3, 2, 110, '2025-11-21', 'Gas'),
 
 -- December 2025
-(3, 1, 190.00, '2025-12-03', 'Restaurant'),
-(3, 8, 2000.00, '2025-12-08', 'Vacation booking'),
-(3, 1, 240.00, '2025-12-13', 'Fine dining'),
-(3, 3, 650.00, '2025-12-18', 'Clothing'),
-(3, 4, 150.00, '2025-12-23', 'Entertainment'),
-(3, 1, 400.00, '2025-12-23', 'Year-end party');
+(3, 1, 190, '2025-12-03', 'Restaurant'),
+(3, 8, 2000, '2025-12-08', 'Vacation booking'),
+(3, 1, 240, '2025-12-13', 'Fine dining'),
+(3, 3, 650, '2025-12-18', 'Clothing'),
+(3, 4, 150, '2025-12-23', 'Entertainment'),
+(3, 1, 400, '2025-12-23', 'Year-end party');
 
--- Sarah Williams - User ID 4
 INSERT INTO expenses (user_id, category_id, amount, date, description) VALUES
 -- October 2025
-(4, 1, 135.00, '2025-10-03', 'Weekly groceries'),
-(4, 7, 600.00, '2025-10-12', 'University fees'),
-(4, 2, 40.00, '2025-10-18', 'Bus pass'),
-(4, 1, 110.00, '2025-10-24', 'Dinner with family'),
+(4, 1, 135, '2025-10-03', 'Weekly groceries'),
+(4, 7, 600, '2025-10-12', 'University fees'),
+(4, 2, 40, '2025-10-18', 'Bus pass'),
+(4, 1, 110, '2025-10-24', 'Dinner with family'),
 
 -- November 2025
-(4, 1, 145.00, '2025-11-05', 'Groceries'),
-(4, 9, 200.00, '2025-11-10', 'Salon visit'),
-(4, 3, 350.00, '2025-11-15', 'New clothes'),
-(4, 6, 180.00, '2025-11-22', 'Medical checkup'),
+(4, 1, 145, '2025-11-05', 'Groceries'),
+(4, 9, 200, '2025-11-10', 'Salon visit'),
+(4, 3, 350, '2025-11-15', 'New clothes'),
+(4, 6, 180, '2025-11-22', 'Medical checkup'),
 
 -- December 2025
-(4, 1, 155.00, '2025-12-04', 'Grocery shopping'),
-(4, 4, 100.00, '2025-12-11', 'Music concert'),
-(4, 3, 480.00, '2025-12-19', 'Christmas shopping'),
-(4, 1, 170.00, '2025-12-25', 'Christmas feast');
+(4, 1, 155, '2025-12-04', 'Grocery shopping'),
+(4, 4, 100, '2025-12-11', 'Music concert'),
+(4, 3, 480, '2025-12-19', 'Christmas shopping'),
+(4, 1, 170, '2025-12-25', 'Christmas feast');
 
--- Tom Brown - User ID 5
 INSERT INTO expenses (user_id, category_id, amount, date, description) VALUES
 -- October 2025
-(5, 5, 400.00, '2025-10-01', 'Rent payment'),
-(5, 1, 125.00, '2025-10-06', 'Groceries'),
-(5, 2, 80.00, '2025-10-14', 'Gas'),
-(5, 4, 65.00, '2025-10-21', 'Movie night'),
+(5, 5, 400, '2025-10-01', 'Rent payment'),
+(5, 1, 125, '2025-10-06', 'Groceries'),
+(5, 2, 80, '2025-10-14', 'Gas'),
+(5, 4, 65, '2025-10-21', 'Movie night'),
 
 -- November 2025
-(5, 5, 400.00, '2025-11-01', 'Rent payment'),
-(5, 1, 130.00, '2025-11-07', 'Weekly shopping'),
-(5, 3, 280.00, '2025-11-14', 'New headphones'),
-(5, 2, 75.00, '2025-11-20', 'Car fuel'),
+(5, 5, 400, '2025-11-01', 'Rent payment'),
+(5, 1, 130, '2025-11-07', 'Weekly shopping'),
+(5, 3, 280, '2025-11-14', 'New headphones'),
+(5, 2, 75, '2025-11-20', 'Car fuel'),
 
 -- December 2025
-(5, 5, 400.00, '2025-12-01', 'Rent payment'),
-(5, 1, 140.00, '2025-12-06', 'Groceries'),
-(5, 3, 550.00, '2025-12-16', 'Gaming console'),
-(5, 4, 120.00, '2025-12-24', 'Christmas party');
+(5, 5, 400, '2025-12-01', 'Rent payment'),
+(5, 1, 140, '2025-12-06', 'Groceries'),
+(5, 3, 550, '2025-12-16', 'Gaming console'),
+(5, 4, 120, '2025-12-24', 'Christmas party');
 
 -- ============================================
 -- Useful Queries for Testing

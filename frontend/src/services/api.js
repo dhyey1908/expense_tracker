@@ -10,7 +10,6 @@ const api = axios.create({
     },
 });
 
-// API Functions
 export const expenseAPI = {
     getAll: (filters) => api.get('/expenses', { params: filters }),
     getById: (id) => api.get(`/expenses/${id}`),
@@ -33,7 +32,6 @@ export const statisticsAPI = {
     predictNextMonth: () => api.get('/statistics/predict-next-month'),
 };
 
-// React Query Hooks
 export const useExpenses = (filters) => {
     return useQuery({
         queryKey: ['expenses', filters],

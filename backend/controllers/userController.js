@@ -1,18 +1,8 @@
 const db = require('../config/database');
 
-// Get all users
 const getUsers = async (req, res) => {
     try {
-        const query = `
-      SELECT 
-        id, 
-        name, 
-        email, 
-        status, 
-        created_at
-      FROM users 
-      ORDER BY name ASC
-    `;
+        const query = `SELECT id, name, email, status, created_at FROM users ORDER BY name ASC`;
 
         const [users] = await db.query(query);
 
@@ -31,21 +21,11 @@ const getUsers = async (req, res) => {
     }
 };
 
-// Get user by ID
 const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const query = `
-      SELECT 
-        id, 
-        name, 
-        email, 
-        status, 
-        created_at
-      FROM users 
-      WHERE id = ?
-    `;
+        const query = `SELECT id, name, email, status, created_at FROM users WHERE id = ?`;
 
         const [users] = await db.query(query, [id]);
 

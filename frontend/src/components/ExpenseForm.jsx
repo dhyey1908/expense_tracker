@@ -33,7 +33,7 @@ const ExpenseForm = () => {
 
         if (!formData.amount) {
             newErrors.amount = 'Amount is required';
-        } else if (parseFloat(formData.amount) <= 0) {
+        } else if (parseInt(formData.amount, 10) <= 0) {
             newErrors.amount = 'Amount must be greater than 0';
         }
 
@@ -52,7 +52,6 @@ const ExpenseForm = () => {
             [name]: value
         }));
 
-        // Clear error for this field
         if (errors[name]) {
             setErrors(prev => ({
                 ...prev,
@@ -60,7 +59,6 @@ const ExpenseForm = () => {
             }));
         }
 
-        // Clear success message
         if (successMessage) {
             setSuccessMessage('');
         }
@@ -76,12 +74,11 @@ const ExpenseForm = () => {
         try {
             await createExpense.mutateAsync({
                 ...formData,
-                amount: parseFloat(formData.amount),
+                amount: parseInt(formData.amount, 10),
             });
 
             setSuccessMessage('✅ Expense added successfully!');
 
-            // Reset form
             setFormData({
                 user_id: '',
                 category_id: '',
@@ -92,7 +89,6 @@ const ExpenseForm = () => {
 
             setErrors({});
 
-            // Clear success message after 3 seconds
             setTimeout(() => setSuccessMessage(''), 3000);
         } catch (error) {
             console.error('Error adding expense:', error);
@@ -176,7 +172,7 @@ const ExpenseForm = () => {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label" htmlFor="amount">Amount ($) *</label>
+                        <label className="form-label" htmlFor="amount">Amount (₹) *</label>
                         <input
                             id="amount"
                             type="number"
@@ -185,7 +181,7 @@ const ExpenseForm = () => {
                             value={formData.amount}
                             onChange={handleChange}
                             placeholder="Enter amount"
-                            step="0.01"
+                            step="1"
                             min="0"
                         />
                         {errors.amount && <div className="error-message">{errors.amount}</div>}
