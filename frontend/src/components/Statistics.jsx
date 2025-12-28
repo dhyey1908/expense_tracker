@@ -28,6 +28,17 @@ const Statistics = () => {
         </div>
     );
 
+    const formatMonth = (dateStr) => {
+        if (!dateStr) return '';
+        const [year, month] = dateStr.split('-');
+        return `${month}/${year}`;
+    };
+
+    const formatHistoryString = (historyStr) => {
+        if (!historyStr) return '';
+        return historyStr.replace(/(\d{4})-(\d{2})/g, '$2/$1');
+    };
+
     return (
         <div className="glass-card">
             <div className="section-header">
@@ -63,11 +74,7 @@ const Statistics = () => {
                                             <div key={index} className="stat-item">
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                     <span style={{ color: 'var(--text-primary)' }}>
-                                                        #{index + 1} - {new Date(day.date).toLocaleDateString('en-US', {
-                                                            year: 'numeric',
-                                                            month: 'short',
-                                                            day: 'numeric'
-                                                        })}
+                                                        #{index + 1} - {new Date(day.date).toLocaleDateString('en-GB')}
                                                     </span>
                                                     <span className="badge badge-amount" style={{ fontSize: '0.85rem' }}>
                                                         ₹{parseFloat(day.amount).toFixed(0)}
@@ -121,7 +128,7 @@ const Statistics = () => {
                                                 <div key={index} className="stat-item">
                                                     <div style={{ marginBottom: '4px' }}>
                                                         <strong style={{ color: 'var(--text-primary)' }}>
-                                                            {month.current_month}
+                                                            {formatMonth(month.current_month)}
                                                         </strong>
                                                     </div>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '2px' }}>
@@ -183,7 +190,7 @@ const Statistics = () => {
                                             {userData.user_name}
                                         </div>
                                         <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                                            Predicted for: <strong style={{ color: 'var(--text-primary)' }}>{userData.next_month}</strong>
+                                            Predicted for: <strong style={{ color: 'var(--text-primary)' }}>{formatMonth(userData.next_month)}</strong>
                                         </div>
                                         <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
                                             Based on {userData.months_analyzed} month{userData.months_analyzed > 1 ? 's' : ''}
@@ -201,7 +208,7 @@ const Statistics = () => {
                                             paddingTop: '8px',
                                             borderTop: '1px solid var(--border-glass)'
                                         }}>
-                                            {userData.last_months_data}
+                                            {formatHistoryString(userData.last_months_data)}
                                         </div>
                                     </div>
                                 ))

@@ -1,58 +1,16 @@
-const db = require('../config/database');
+const expenseService = require('../services/expenseService');
 
 const getExpenses = async (req, res) => {
     try {
-        const { user_id, category_id, start_date, end_date } = req.query;
+        const filters = {
+            user_id: req.query.user_id,
+            category_id: req.query.category_id,
+            start_date: req.query.start_date,
+            end_date: req.query.end_date
+        };
 
-        let query = `
-      SELECT 
-        e.id, 
-        e.user_id, 
-        u.name as user_name,
-        e.category_id,
-        c.name as category_name, 
-        e.amount, 
-        e.date, 
-        e.description,
-        e.created_at,
-        e.updated_at
-      FROM expenses e
-      JOIN users u ON e.user_id = u.id
-      JOIN categories c ON e.category_id = c.id
-      WHERE 1=1
-    `;
-
-        const params = [];
-
-        if (user_id) {
-            query += ' AND e.user_id = ?';
-            params.push(user_id);
-        }
-
-        if (category_id) {
-            query += ' AND e.category_id = ?';
-            params.push(category_id);
-        }
-
-        if (start_date) {
-            query += ' AND e.date >= ?';
-            params.push(start_date);
-        }
-
-        if (end_date) {
-            query += ' AND e.date <= ?';
-            params.push(end_date);
-        }
-
-        query += ' ORDER BY e.date DESC, e.created_at DESC';
-
-        const [expenses] = await db.query(query, params);
-
-        res.status(200).json({
-            success: true,
-            count: expenses.length,
-            data: expenses
-        });
+        const result = await expenseService.getAllExpenses(filters);
+        res.status(result.status).json(result);
     } catch (error) {
         console.error('Error fetching expenses:', error);
         res.status(500).json({
@@ -66,38 +24,8 @@ const getExpenses = async (req, res) => {
 const getExpenseById = async (req, res) => {
     try {
         const { id } = req.params;
-
-        const query = `
-      SELECT 
-        e.id, 
-        e.user_id, 
-        u.name as user_name,
-        e.category_id,
-        c.name as category_name, 
-        e.amount, 
-        e.date, 
-        e.description,
-        e.created_at,
-        e.updated_at
-      FROM expenses e
-      JOIN users u ON e.user_id = u.id
-      JOIN categories c ON e.category_id = c.id
-      WHERE e.id = ?
-    `;
-
-        const [expenses] = await db.query(query, [id]);
-
-        if (expenses.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Expense not found'
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            data: expenses[0]
-        });
+        const result = await expenseService.getExpenseById(id);
+        res.status(result.status).json(result);
     } catch (error) {
         console.error('Error fetching expense:', error);
         res.status(500).json({
@@ -110,60 +38,16 @@ const getExpenseById = async (req, res) => {
 
 const addExpense = async (req, res) => {
     try {
-        const { user_id, category_id, amount, date, description } = req.body;
+        const expenseData = {
+            user_id: req.body.user_id,
+            category_id: req.body.category_id,
+            amount: req.body.amount,
+            date: req.body.date,
+            description: req.body.description
+        };
 
-        const [users] = await db.query('SELECT id FROM users WHERE id = ?', [user_id]);
-        if (users.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found'
-            });
-        }
-
-        const [categories] = await db.query('SELECT id FROM categories WHERE id = ?', [category_id]);
-        if (categories.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Category not found'
-            });
-        }
-
-        const query = `
-      INSERT INTO expenses (user_id, category_id, amount, date, description) 
-      VALUES (?, ?, ?, ?, ?)
-    `;
-
-        const [result] = await db.query(query, [
-            user_id,
-            category_id,
-            amount,
-            date,
-            description || null
-        ]);
-
-        const [newExpense] = await db.query(`
-      SELECT 
-        e.id, 
-        e.user_id, 
-        u.name as user_name,
-        e.category_id,
-        c.name as category_name, 
-        e.amount, 
-        e.date, 
-        e.description,
-        e.created_at,
-        e.updated_at
-      FROM expenses e
-      JOIN users u ON e.user_id = u.id
-      JOIN categories c ON e.category_id = c.id
-      WHERE e.id = ?
-    `, [result.insertId]);
-
-        res.status(201).json({
-            success: true,
-            message: 'Expense added successfully',
-            data: newExpense[0]
-        });
+        const result = await expenseService.createExpense(expenseData);
+        res.status(result.status).json(result);
     } catch (error) {
         console.error('Error adding expense:', error);
         res.status(500).json({
@@ -177,99 +61,17 @@ const addExpense = async (req, res) => {
 const updateExpense = async (req, res) => {
     try {
         const { id } = req.params;
-        const { user_id, category_id, amount, date, description } = req.body;
+        const expenseData = req.body;
 
-        const [existing] = await db.query('SELECT id FROM expenses WHERE id = ?', [id]);
-        if (existing.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Expense not found'
-            });
-        }
-
-        if (user_id) {
-            const [users] = await db.query('SELECT id FROM users WHERE id = ?', [user_id]);
-            if (users.length === 0) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'User not found'
-                });
-            }
-        }
-
-        if (category_id) {
-            const [categories] = await db.query('SELECT id FROM categories WHERE id = ?', [category_id]);
-            if (categories.length === 0) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Category not found'
-                });
-            }
-        }
-
-        const updates = [];
-        const params = [];
-
-        if (user_id !== undefined) {
-            updates.push('user_id = ?');
-            params.push(user_id);
-        }
-
-        if (category_id !== undefined) {
-            updates.push('category_id = ?');
-            params.push(category_id);
-        }
-
-        if (amount !== undefined) {
-            updates.push('amount = ?');
-            params.push(amount);
-        }
-
-        if (date !== undefined) {
-            updates.push('date = ?');
-            params.push(date);
-        }
-
-        if (description !== undefined) {
-            updates.push('description = ?');
-            params.push(description);
-        }
-
-        if (updates.length === 0) {
+        if (Object.keys(expenseData).length === 0) {
             return res.status(400).json({
                 success: false,
                 message: 'No fields to update'
             });
         }
 
-        params.push(id);
-        const query = `UPDATE expenses SET ${updates.join(', ')} WHERE id = ?`;
-
-        await db.query(query, params);
-
-        const [updatedExpense] = await db.query(`
-      SELECT 
-        e.id, 
-        e.user_id, 
-        u.name as user_name,
-        e.category_id,
-        c.name as category_name, 
-        e.amount, 
-        e.date, 
-        e.description,
-        e.created_at,
-        e.updated_at
-      FROM expenses e
-      JOIN users u ON e.user_id = u.id
-      JOIN categories c ON e.category_id = c.id
-      WHERE e.id = ?
-    `, [id]);
-
-        res.status(200).json({
-            success: true,
-            message: 'Expense updated successfully',
-            data: updatedExpense[0]
-        });
+        const result = await expenseService.updateExpense(id, expenseData);
+        res.status(result.status).json(result);
     } catch (error) {
         console.error('Error updating expense:', error);
         res.status(500).json({
@@ -283,21 +85,8 @@ const updateExpense = async (req, res) => {
 const deleteExpense = async (req, res) => {
     try {
         const { id } = req.params;
-
-        const [existing] = await db.query('SELECT id FROM expenses WHERE id = ?', [id]);
-        if (existing.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Expense not found'
-            });
-        }
-
-        await db.query('DELETE FROM expenses WHERE id = ?', [id]);
-
-        res.status(200).json({
-            success: true,
-            message: 'Expense deleted successfully'
-        });
+        const result = await expenseService.deleteExpense(id);
+        res.status(result.status).json(result);
     } catch (error) {
         console.error('Error deleting expense:', error);
         res.status(500).json({

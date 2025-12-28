@@ -1,16 +1,9 @@
-const db = require('../config/database');
+const categoryService = require('../services/categoryService');
 
 const getCategories = async (req, res) => {
     try {
-        const query = `SELECT id, name, created_at FROM categories ORDER BY name ASC`;
-
-        const [categories] = await db.query(query);
-
-        res.status(200).json({
-            success: true,
-            count: categories.length,
-            data: categories
-        });
+        const result = await categoryService.getAllCategories();
+        res.status(result.status).json(result);
     } catch (error) {
         console.error('Error fetching categories:', error);
         res.status(500).json({
@@ -24,22 +17,8 @@ const getCategories = async (req, res) => {
 const getCategoryById = async (req, res) => {
     try {
         const { id } = req.params;
-
-        const query = `SELECT id, name, created_at FROM categories WHERE id = ?`;
-
-        const [categories] = await db.query(query, [id]);
-
-        if (categories.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Category not found'
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            data: categories[0]
-        });
+        const result = await categoryService.getCategoryById(id);
+        res.status(result.status).json(result);
     } catch (error) {
         console.error('Error fetching category:', error);
         res.status(500).json({

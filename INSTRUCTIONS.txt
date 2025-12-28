@@ -1,0 +1,28 @@
+Hello,
+
+Thank you for reviewing the MERN Stack Assignment submission.
+
+Updates:
+- The backend has been completely refactored to follow a strict MVC + Service architecture:
+  - Controllers: Handle HTTP Request/Response only.
+  - Services: Handle Business Logic and Validations.
+  - Models: Handle Database Queries only.
+
+Getting Started:
+1. Unzip the "expense_tracker_code.zip" file.
+2. Open the "expense_tracker" folder.
+
+Database Setup (Queries):
+- The SQL queries to create the Tables and insert dummy data are located in:
+  /database/schema.sql
+- Please import this file into your MySQL server to initialize the database "expense_tracker".
+
+Project Setup:
+- Please refer to the "README.md" file in the root directory.
+- It contains detailed step-by-step instructions for installing dependencies and running the Backend and Frontend.
+
+Screenshots:
+- Screenshots demonstrating the 3 required statistics are located in the /screenshots folder.
+
+Regards,
+[Your Name]

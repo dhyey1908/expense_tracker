@@ -248,11 +248,7 @@ const ExpenseList = () => {
                                                 {editErrors.date && <div className="error-message" style={{ fontSize: '0.8rem', marginTop: '4px' }}>{editErrors.date}</div>}
                                             </>
                                         ) : (
-                                            new Date(expense.date).toLocaleDateString('en-US', {
-                                                year: 'numeric',
-                                                month: 'short',
-                                                day: 'numeric'
-                                            })
+                                            new Date(expense.date).toLocaleDateString('en-GB')
                                         )}
                                     </td>
                                     <td data-label="Description">
