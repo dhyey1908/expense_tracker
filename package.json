@@ -1,26 +1,20 @@
 {
-  "name": "petpooja",
-  "version": "1.0.0",
-  "description": "Full-stack expense management application with React, Node.js, Express, and MySQL.",
-  "main": "index.js",
-  "scripts": {
-    "setup-db": "gulp setup-database",
-    "start": "gulp",
-    "install-all": "gulp install",
-    "dev": "gulp dev"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dhyey1908/expense_tracker.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dhyey1908/expense_tracker/issues"
-  },
-  "homepage": "https://github.com/dhyey1908/expense_tracker#readme",
-  "devDependencies": {
-    "gulp": "^5.0.1"
-  }
+    "name": "expense-tracker",
+    "version": "1.0.0",
+    "description": "Full-stack expense management application with React, Node.js, Express, and MySQL.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dhyey1908/expense_tracker.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/dhyey1908/expense_tracker/issues"
+    },
+    "homepage": "https://github.com/dhyey1908/expense_tracker#readme"
 }

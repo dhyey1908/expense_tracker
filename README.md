@@ -2,6 +2,21 @@
 
 Full-stack expense management application with React, Node.js, Express, and MySQL.
 
+## Project Screenshots
+
+### 1. Top Spending Days
+![Top Days](screenshots/statistic_1.png)
+_Shows the top 3 days where each user spent the most_
+
+### 2. Monthly Change
+![Monthly Change](screenshots/statistic_2.png)
+_Displays percentage increase or decrease in spending compared to last month_
+
+### 3. Next Month Prediction
+![Prediction](screenshots/statistic_3.png)
+_Forecasts next month's spending based on the 3-month average_
+
+
 ## Quick Start
 
 ### 1. Prerequisites
@@ -9,95 +24,60 @@ Full-stack expense management application with React, Node.js, Express, and MySQ
 - MySQL Server
 - npm or yarn
 
-### 2. Automated Setup (Recommended)
+### 2. Setup Instructions
 
-This project uses Gulp to manage tasks across different platforms (Windows/Linux).
+#### Database Setup
+1. Start your MySQL server.
+2. Create the database and use it:
+   ```sql
+   CREATE DATABASE expense_tracker;
+   USE expense_tracker;
+   ```
+3. Import the schema found in `database/schema.sql` into the database. You can do this via command line or a GUI tool like Workbench/HeidiSQL.
 
-#### Setup
-1. **Install Root Dependencies**:
+#### Backend Setup
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
    ```bash
    npm install
    ```
-
-2. **Install App Dependencies**:
+3. Configure environment variables:
+   - Copy `.env.example` to `.env`:
+     ```bash
+     cp .env.example .env
+     # Windows Command Prompt: copy .env.example .env
+     ```
+   - Open `.env` and update your database credentials (password specifically):
+     ```properties
+     PORT=5000
+     DB_HOST=localhost
+     DB_USER=root
+     DB_PASSWORD=your_password_here  # <--- Update this
+     DB_NAME=expense_tracker
+     ```
+4. Start the backend server:
    ```bash
-   npm run install-all
+   npm start
    ```
-
-3. **Configure Environment**:
-   Create a `.env` file in the `backend` folder based on `.env.example`.
-   ```bash
-   cp backend/.env.example backend/.env
-   # Update DB_PASSWORD in backend/.env with your MySQL password
-   ```
-
-4. **Setup Database**:
-   ```bash
-   npm run setup-db
-   ```
-   *Follow the prompts to enter your MySQL root password.*
-
-#### Running the App
-Start both frontend and backend concurrently:
-```bash
-npm start
-```
-- Frontend: `http://localhost:3000`
-- Backend: `http://localhost:5000`
-
-
-### 3. Manual Setup
-
-If you prefer to set up manually or encounter issues with the automated scripts:
-
-#### Database Setup
-Start MySQL and run these commands:
-
-```sql
-CREATE DATABASE expense_tracker;
-USE expense_tracker;
-
--- Run the SQL commands found in database/schema.sql
-```
-
-#### Backend Setup
-
-```bash
-cd backend
-npm install
-```
-
-**Configuration**:
-1. Copy `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   # OR on Windows Command Prompt: copy .env.example .env
-   ```
-2. Open `.env` and set your database credentials:
-   ```properties
-   PORT=5000
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASSWORD=your_password  # <--- Update this
-   DB_NAME=expense_tracker
-   ```
-
-Start backend:
-```bash
-npm start
-```
-
-Backend runs on `http://localhost:5000`
+   *The backend will run on `http://localhost:5000`*
 
 #### Frontend Setup
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-Frontend runs on `http://localhost:3000`
+1. Open a new terminal and navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the React development server:
+   ```bash
+   npm start
+   ```
+   *The frontend will run on `http://localhost:3000`*
 
 ## API Endpoints
 
@@ -135,19 +115,21 @@ Frontend runs on `http://localhost:3000`
 - Form validation (client + server)
 - Responsive design
 
+
 ## Project Screenshots
 
-### 1. Top Spending Days (Statistic 1)
+### 1. Top Spending Days
 ![Top Days](screenshots/statistic_1.png)
 _Shows the top 3 days where each user spent the most_
 
-### 2. Monthly Change (Statistic 2)
+### 2. Monthly Change
 ![Monthly Change](screenshots/statistic_2.png)
 _Displays percentage increase or decrease in spending compared to last month_
 
-### 3. Next Month Prediction (Statistic 3)
+### 3. Next Month Prediction
 ![Prediction](screenshots/statistic_3.png)
 _Forecasts next month's spending based on the 3-month average_
+
 
 ## Tech Stack
 
@@ -160,7 +142,7 @@ _Forecasts next month's spending based on the 3-month average_
 ## Project Structure
 
 ```
-petpooja/
+expense-tracker/
 ├── backend/
 │   ├── config/
 │   │   └── database.js
@@ -239,6 +221,3 @@ npm run dev
 - RESTful API architecture
 - Sample data included for testing
 
-## License
-
-Educational project

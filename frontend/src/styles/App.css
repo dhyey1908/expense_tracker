@@ -163,6 +163,10 @@ body {
   color: var(--text-light);
 }
 
+input[type="date"] {
+  cursor: pointer;
+}
+
 .form-textarea {
   resize: vertical;
   min-height: 80px;

@@ -73,6 +73,7 @@ const FilterSection = () => {
                         className="form-input"
                         value={filters.start_date}
                         onChange={handleFilterChange}
+                        onClick={(e) => e.target.showPicker()}
                     />
                 </div>
 
@@ -85,6 +86,7 @@ const FilterSection = () => {
                         className="form-input"
                         value={filters.end_date}
                         onChange={handleFilterChange}
+                        onClick={(e) => e.target.showPicker()}
                     />
                 </div>
             </div>

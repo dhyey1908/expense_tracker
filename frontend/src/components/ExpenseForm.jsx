@@ -77,7 +77,7 @@ const ExpenseForm = () => {
                 amount: parseInt(formData.amount, 10),
             });
 
-            setSuccessMessage('✅ Expense added successfully!');
+            setSuccessMessage('Expense added successfully!');
 
             setFormData({
                 user_id: '',
@@ -127,7 +127,7 @@ const ExpenseForm = () => {
                     marginBottom: '1rem',
                     fontWeight: '600'
                 }}>
-                    ❌ {errors.submit}
+                    {errors.submit}
                 </div>
             )}
 
@@ -183,6 +183,11 @@ const ExpenseForm = () => {
                             placeholder="Enter amount"
                             step="1"
                             min="0"
+                            onKeyDown={(e) => {
+                                if (e.key === '.' || e.key === 'e') {
+                                    e.preventDefault();
+                                }
+                            }}
                         />
                         {errors.amount && <div className="error-message">{errors.amount}</div>}
                     </div>
@@ -196,6 +201,8 @@ const ExpenseForm = () => {
                             className="form-input"
                             value={formData.date}
                             onChange={handleChange}
+                            max={new Date().toISOString().split('T')[0]}
+                            onClick={(e) => e.target.showPicker()}
                         />
                         {errors.date && <div className="error-message">{errors.date}</div>}
                     </div>
