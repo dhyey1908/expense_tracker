@@ -47,7 +47,7 @@ const Statistics = () => {
             </div>
 
             <div className="stats-grid">
-                {/* Statistic 1: Top 3 Days by Expenditure */}
+                {/* Statistic 1 */}
                 {topDays.isLoading ? (
                     <LoadingCard title="Top 3 Spending Days per User" />
                 ) : topDays.error ? (
@@ -89,7 +89,7 @@ const Statistics = () => {
                     </div>
                 )}
 
-                {/* Statistic 2: Monthly Percentage Change */}
+                {/* Statistic 2 */}
                 {monthlyChange.isLoading ? (
                     <LoadingCard title="Monthly Expenditure Change" />
                 ) : monthlyChange.error ? (
@@ -161,7 +161,7 @@ const Statistics = () => {
                     </div>
                 )}
 
-                {/* Statistic 3: Next Month Prediction */}
+                {/* Statistic 3 */}
                 {predictNextMonth.isLoading ? (
                     <LoadingCard title="Next Month Prediction" />
                 ) : predictNextMonth.error ? (

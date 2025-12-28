@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useUsers, useCategories, useCreateExpense } from '../services/api';
-import { clearSelectedExpense } from '../store/slices/expenseSlice';
 
 const ExpenseForm = () => {
-    const dispatch = useDispatch();
     const { data: usersData } = useUsers();
     const { data: categoriesData } = useCategories();
     const createExpense = useCreateExpense();
